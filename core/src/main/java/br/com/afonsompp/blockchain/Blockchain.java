@@ -6,6 +6,8 @@ import java.util.List;
 public class Blockchain {
 	private static List<Block> blockchain = new ArrayList<>();
 
+	private static Integer difficulty = 5;
+
 	private Blockchain() {}
 
 	public static List<Block> getBlockchain() {
@@ -14,11 +16,14 @@ public class Blockchain {
 
 	public static void addBlock(String data) {
 		if (blockchain.isEmpty()) {
-			blockchain.add(new Block("0", data));
+			var block = new Block("0", data);
+			block.mineBlock(difficulty);
+			blockchain.add(block);
 			return;
 		}
-		var previousHash = blockchain.get(blockchain.size() - 1).calculateHash();
-		blockchain.add(new Block(previousHash, data));
+		var previousBlock = blockchain.get(blockchain.size() - 1);
+		previousBlock.mineBlock(difficulty);
+		blockchain.add(new Block(previousBlock.getHash(), data));
 	}
 
 	public static Boolean isChainValid() {
