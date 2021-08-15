@@ -6,12 +6,12 @@ import com.google.common.hash.Hashing;
 
 public class Block {
 	private String hash;
-	private String previusHash;
+	private String previousHash;
 	private String data;
 	private Long timestamp;
 
 	public Block(String previusHash, String data) {
-		this.previusHash = previusHash;
+		this.previousHash = previusHash;
 		this.data = data;
 		this.timestamp = Instant.now().toEpochMilli();
 		this.hash = calculateHash();
@@ -25,12 +25,12 @@ public class Block {
 		this.hash = hash;
 	}
 
-	public String getPreviusHash() {
-		return this.previusHash;
+	public String getPreviousHash() {
+		return this.previousHash;
 	}
 
-	public void setPreviusHash(String previusHash) {
-		this.previusHash = previusHash;
+	public void setPreviusHash(String previousHash) {
+		this.previousHash = previousHash;
 	}
 
 	public String getData() {
@@ -44,7 +44,7 @@ public class Block {
 	public String calculateHash() {
 
 		return Hashing.sha256()
-				.hashString(previusHash + timestamp.toString() + data, StandardCharsets.UTF_8)
+				.hashString(previousHash + timestamp.toString() + data, StandardCharsets.UTF_8)
 				.toString();
 	}
 

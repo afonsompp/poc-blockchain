@@ -23,7 +23,7 @@ public class Blockchain {
 			currentBlock = blockchain.get(i);
 			previousBlock = blockchain.get(i - 1);
 
-			if (!currentBlock.getPreviusHash().equals(previousBlock.getHash()))
+			if (!currentBlock.getPreviousHash().equals(previousBlock.getHash()))
 				return false;
 
 		}
