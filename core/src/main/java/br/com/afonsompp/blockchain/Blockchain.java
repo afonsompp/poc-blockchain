@@ -6,6 +6,8 @@ import java.util.List;
 public class Blockchain {
 	private static List<Block> blockchain = new ArrayList<>();
 
+	private Blockchain() {}
+
 	public static void addBlock(Block block) {
 		blockchain.add(block);
 	}
