@@ -8,8 +8,17 @@ public class Blockchain {
 
 	private Blockchain() {}
 
-	public static void addBlock(Block block) {
-		blockchain.add(block);
+	public static List<Block> getBlockchain() {
+		return blockchain;
+	}
+
+	public static void addBlock(String data) {
+		if (blockchain.isEmpty()) {
+			blockchain.add(new Block("0", data));
+			return;
+		}
+		var previousHash = blockchain.get(blockchain.size() - 1).calculateHash();
+		blockchain.add(new Block(previousHash, data));
 	}
 
 	public static Boolean isChainValid() {
