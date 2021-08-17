@@ -2,17 +2,19 @@ package br.com.afonsompp.blockchain;
 
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
+
 import com.google.common.hash.Hashing;
 
 public class Block {
+
 	private String hash;
 	private String previousHash;
 	private String data;
 	private Long timestamp;
 	private Integer nonce = 0;
 
-	public Block(String previusHash, String data) {
-		this.previousHash = previusHash;
+	public Block(String previousHash, String data) {
+		this.previousHash = previousHash;
 		this.data = data;
 		this.timestamp = Instant.now().toEpochMilli();
 		this.hash = calculateHash();
@@ -30,7 +32,7 @@ public class Block {
 		return this.previousHash;
 	}
 
-	public void setPreviusHash(String previousHash) {
+	public void setPreviousHash(String previousHash) {
 		this.previousHash = previousHash;
 	}
 
@@ -45,9 +47,9 @@ public class Block {
 	public String calculateHash() {
 
 		return Hashing.sha256()
-				.hashString(previousHash + timestamp.toString() + nonce.toString() + data,
-						StandardCharsets.UTF_8)
-				.toString();
+			.hashString(previousHash + timestamp.toString() + nonce.toString() + data,
+				StandardCharsets.UTF_8)
+			.toString();
 	}
 
 	public void mineBlock(Integer difficulty) {
