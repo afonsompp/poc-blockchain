@@ -16,5 +16,10 @@
       <artifactId>utils</artifactId>
       <version>1.0.0</version>
     </dependency>
+    <dependency>
+      <groupId>br.com.afonsompp</groupId>
+      <artifactId>transaction</artifactId>
+      <version>1.0.0</version>
+    </dependency>
   </dependencies>
 </project>
