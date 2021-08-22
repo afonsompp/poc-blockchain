@@ -22,6 +22,11 @@
       <artifactId>guava</artifactId>
       <version>30.1.1-jre</version>
     </dependency>
+    <dependency>
+      <groupId>br.com.afonsompp</groupId>
+      <artifactId>transaction</artifactId>
+      <version>1.0.0</version>
+    </dependency>
   </dependencies>
 
 </project>
