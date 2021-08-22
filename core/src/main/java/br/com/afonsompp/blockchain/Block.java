@@ -1,10 +1,11 @@
 package br.com.afonsompp.blockchain;
 
-import java.nio.charset.StandardCharsets;
+import br.com.afonsompp.blockchain.utils.StringUtils;
+
 import java.time.Instant;
-import com.google.common.hash.Hashing;
 
 public class Block {
+
 	private String hash;
 	private String previousHash;
 	private String data;
@@ -43,11 +44,7 @@ public class Block {
 	}
 
 	public String calculateHash() {
-
-		return Hashing.sha256()
-				.hashString(previousHash + timestamp.toString() + nonce.toString() + data,
-						StandardCharsets.UTF_8)
-				.toString();
+		return StringUtils.applySHA256(previousHash + timestamp.toString() + nonce.toString() + data);
 	}
 
 	public void mineBlock(Integer difficulty) {

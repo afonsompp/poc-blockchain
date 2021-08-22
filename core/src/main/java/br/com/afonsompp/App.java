@@ -1,12 +1,12 @@
 package br.com.afonsompp;
 
-import com.google.gson.GsonBuilder;
 import br.com.afonsompp.blockchain.Blockchain;
+import br.com.afonsompp.blockchain.utils.StringUtils;
 
 public class App {
 
 	public static void main(String[] args) {
-		var gson = new GsonBuilder().setPrettyPrinting().create();
+
 		Blockchain.addBlock("firstBlock");
 		Blockchain.addBlock("secondBlock");
 
@@ -14,7 +14,7 @@ public class App {
 		for (var block : Blockchain.getBlockchain()) {
 			System.out.println("Try mining block");
 			block.mineBlock(5);
-			System.out.println(gson.toJson(block));
+			System.out.println(StringUtils.toJsonString(block));
 			System.out.println("Block mined");
 			System.out.println("----------------");
 		}
