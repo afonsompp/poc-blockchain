@@ -13,11 +13,6 @@
   <dependencies>
     <dependency>
       <groupId>br.com.afonsompp</groupId>
-      <artifactId>core</artifactId>
-      <version>1.0.0</version>
-    </dependency>
-    <dependency>
-      <groupId>br.com.afonsompp</groupId>
       <artifactId>utils</artifactId>
       <version>1.0.0</version>
     </dependency>
