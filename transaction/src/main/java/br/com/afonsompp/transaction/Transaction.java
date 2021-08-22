@@ -64,6 +64,10 @@ public class Transaction {
 		return id;
 	}
 
+	public void setId(String id) {
+		this.id = id;
+	}
+
 	public Double getValue() {
 		return value;
 	}
