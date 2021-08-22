@@ -30,20 +30,19 @@ public class Transaction {
 		return StringUtils.applySHA256(
 			StringUtils.getStringFromKey(sender) +
 			StringUtils.getStringFromKey(reciepient) +
-			Double.toString(value) +
-			sequence
+			value + sequence
 		);
 	}
 
 	public void generateSignature(PrivateKey privateKey) {
 		String data = StringUtils.getStringFromKey(sender) + StringUtils.getStringFromKey(reciepient)
-					  + Double.toString(value);
+					  + value;
 		signature = StringUtils.applyECDSASig(privateKey, data);
 	}
 
 	public boolean verifySignature() {
 		String data = StringUtils.getStringFromKey(sender) + StringUtils.getStringFromKey(reciepient)
-					  + Double.toString(value);
+					  + value;
 		return StringUtils.verifyECDSASig(sender, data, signature);
 	}
 }
