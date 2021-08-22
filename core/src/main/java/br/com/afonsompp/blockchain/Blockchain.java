@@ -10,7 +10,7 @@ import java.util.*;
 public class Blockchain {
 
 	private static List<Block> blockchain = new ArrayList<>();
-	private static Integer difficulty = 7;
+	private static Integer difficulty = 1;
 	private static Transaction genesisTransaction;
 
 	private Blockchain() {}
