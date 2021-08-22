@@ -1,20 +1,24 @@
 package br.com.afonsompp.blockchain;
 
 import br.com.afonsompp.blockchain.utils.StringUtils;
+import br.com.afonsompp.transaction.Transaction;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 public class Block {
 
 	private String hash;
 	private String previousHash;
-	private String data;
+	private String merkleRoot;
 	private Long timestamp;
 	private Integer nonce = 0;
+	private List<Transaction> transactions = new ArrayList<>();
 
-	public Block(String previusHash, String data) {
-		this.previousHash = previusHash;
-		this.data = data;
+	public Block(String previousHash) {
+		this.previousHash = previousHash;
 		this.timestamp = Instant.now().toEpochMilli();
 		this.hash = calculateHash();
 	}
@@ -35,20 +39,22 @@ public class Block {
 		this.previousHash = previousHash;
 	}
 
-	public String getData() {
-		return this.data;
-	}
-
 	public Long getTimestamp() {
 		return this.timestamp;
 	}
 
+	public List<Transaction> getTransactions() {
+		return transactions;
+	}
+
 	public String calculateHash() {
-		return StringUtils.applySHA256(previousHash + timestamp.toString() + nonce.toString() + data);
+		return StringUtils.applySHA256(
+			previousHash + timestamp.toString() + nonce.toString() + merkleRoot);
 	}
 
 	public void mineBlock(Integer difficulty) {
-		String target = "0".repeat(difficulty);
+		merkleRoot = StringUtils.getMerkleRoot(transactions);
+		String target = StringUtils.getDifficultyString(difficulty);
 
 		while (!hash.substring(0, difficulty).equals(target)) {
 			nonce++;
@@ -57,4 +63,13 @@ public class Block {
 		}
 	}
 
+	public Boolean addTransaction(Transaction transaction) {
+		if (transaction == null)
+			return false;
+		if (!Objects.equals(previousHash, "0") && !transaction.process()) {
+			return false;
+		}
+		transactions.add(transaction);
+		return true;
+	}
 }
