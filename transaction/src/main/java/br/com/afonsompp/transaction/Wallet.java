@@ -2,11 +2,16 @@ package br.com.afonsompp.transaction;
 
 import java.security.*;
 import java.security.spec.ECGenParameterSpec;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Wallet {
 
 	private final PrivateKey privateKey;
 	private final PublicKey publicKey;
+
+	public Map<String, TransactionOutput> UTXOs = new HashMap<>();
 
 	public Wallet() {
 		try {
@@ -28,5 +33,41 @@ public class Wallet {
 
 	public PrivateKey getPrivateKey() {
 		return privateKey;
+	}
+
+	public float getBalance() {
+		float total = 0;
+		for (var item : Transactions.getUTXOs().entrySet()) {
+			var utxo = item.getValue();
+			if (utxo.isMine(publicKey)) {
+				UTXOs.put(utxo.getId(), utxo);
+				total += utxo.getValue();
+			}
+		}
+		return total;
+	}
+
+	public Transaction sendFunds(PublicKey recipient, Double value) {
+		if (getBalance() < value) { //gather balance and check funds.
+			System.out.println("#Not Enough funds to send transaction. Transaction Discarded.");
+			return null;
+		}
+		ArrayList<TransactionInput> inputs = new ArrayList<TransactionInput>();
+		float total = 0;
+		for (var item : UTXOs.entrySet()) {
+			var utxo = item.getValue();
+			total += utxo.getValue();
+			inputs.add(new TransactionInput(utxo.getId()));
+			if (total > value)
+				break;
+		}
+
+		Transaction newTransaction = new Transaction(publicKey, recipient, value, inputs);
+		newTransaction.generateSignature(privateKey);
+
+		for (TransactionInput input : inputs) {
+			UTXOs.remove(input.getTransactionOutputId());
+		}
+		return newTransaction;
 	}
 }
