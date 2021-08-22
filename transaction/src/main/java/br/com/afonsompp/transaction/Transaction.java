@@ -25,6 +25,10 @@ public class Transaction {
 		this.inputs = inputs;
 	}
 
+	public static Integer getSequence() {
+		return sequence;
+	}
+
 	private String calculateHash() {
 		sequence++;
 		return StringUtils.applySHA256(
@@ -38,6 +42,34 @@ public class Transaction {
 		String data = StringUtils.getStringFromKey(sender) + StringUtils.getStringFromKey(reciepient)
 					  + value;
 		signature = StringUtils.applyECDSASig(privateKey, data);
+	}
+
+	public List<TransactionInput> getInputs() {
+		return inputs;
+	}
+
+	public List<TransactionOutput> getOutputs() {
+		return outputs;
+	}
+
+	public PublicKey getReciepient() {
+		return reciepient;
+	}
+
+	public PublicKey getSender() {
+		return sender;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public Double getValue() {
+		return value;
+	}
+
+	public byte[] getSignature() {
+		return signature;
 	}
 
 	public boolean verifySignature() {
@@ -79,7 +111,7 @@ public class Transaction {
 		return true;
 	}
 
-	private Double getInputsValue() {
+	public Double getInputsValue() {
 		Double total = 0D;
 		for (var input : inputs) {
 			if (input.getUTXO() == null)
@@ -89,7 +121,7 @@ public class Transaction {
 		return total;
 	}
 
-	private Double getOutputsValue() {
+	public Double getOutputsValue() {
 		Double total = 0D;
 		for (var output : outputs)
 			total += output.getValue();
