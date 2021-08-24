@@ -10,12 +10,12 @@ import java.util.Objects;
 
 public class Block {
 
+	private final Long timestamp;
+	private final List<Transaction> transactions = new ArrayList<>();
 	private String hash;
 	private String previousHash;
 	private String merkleRoot;
-	private Long timestamp;
 	private Integer nonce = 0;
-	private List<Transaction> transactions = new ArrayList<>();
 
 	public Block(String previousHash) {
 		this.previousHash = previousHash;
@@ -35,7 +35,7 @@ public class Block {
 		return this.previousHash;
 	}
 
-	public void setPreviusHash(String previousHash) {
+	public void setPreviousHash(String previousHash) {
 		this.previousHash = previousHash;
 	}
 

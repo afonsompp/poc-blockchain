@@ -9,15 +9,11 @@ import java.util.*;
 
 public class Blockchain {
 
-	private static List<Block> blockchain = new ArrayList<>();
-	private static Integer difficulty = 1;
+	private static final List<Block> blockchain = new ArrayList<>();
+	private static final Integer difficulty = 1;
 	private static Transaction genesisTransaction;
 
 	private Blockchain() {}
-
-	public static List<Block> getBlockchain() {
-		return blockchain;
-	}
 
 	public static void addBlock(Transaction transaction) {
 		if (blockchain.isEmpty()) {
@@ -84,13 +80,13 @@ public class Blockchain {
 					tempUTXOs.put(output.getId(), output);
 				}
 
-				if (currentTransaction.getOutputs().get(0).getReciepient()
-					!= currentTransaction.getReciepient()) {
+				if (currentTransaction.getOutputs().get(0).getRecipient()
+					!= currentTransaction.getRecipient()) {
 					System.out.println(
 						"#Transaction(" + t + ") output reciepient is not who it should be");
 					return false;
 				}
-				if (currentTransaction.getOutputs().get(1).getReciepient()
+				if (currentTransaction.getOutputs().get(1).getRecipient()
 					!= currentTransaction.getSender()) {
 					System.out.println("#Transaction(" + t + ") output 'change' is not sender.");
 					return false;

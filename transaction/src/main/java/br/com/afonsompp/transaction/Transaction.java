@@ -10,38 +10,19 @@ import java.util.List;
 public class Transaction {
 
 	private static Integer sequence = 0;
+	private final PublicKey sender;
+	private final PublicKey recipient;
+	private final Double value;
+	private final List<TransactionInput> inputs;
+	private final List<TransactionOutput> outputs = new ArrayList<>();
 	private String id;
-	private PublicKey sender;
-	private PublicKey reciepient;
-	private Double value;
 	private byte[] signature;
-	private List<TransactionInput> inputs;
-	private List<TransactionOutput> outputs = new ArrayList<>();
 
 	public Transaction(PublicKey from, PublicKey to, Double value, List<TransactionInput> inputs) {
 		this.sender = from;
-		this.reciepient = to;
+		this.recipient = to;
 		this.value = value;
 		this.inputs = inputs;
-	}
-
-	public static Integer getSequence() {
-		return sequence;
-	}
-
-	private String calculateHash() {
-		sequence++;
-		return StringUtils.applySHA256(
-			StringUtils.getStringFromKey(sender) +
-			StringUtils.getStringFromKey(reciepient) +
-			value + sequence
-		);
-	}
-
-	public void generateSignature(PrivateKey privateKey) {
-		String data = StringUtils.getStringFromKey(sender) + StringUtils.getStringFromKey(reciepient)
-					  + value;
-		signature = StringUtils.applyECDSASig(privateKey, data);
 	}
 
 	public List<TransactionInput> getInputs() {
@@ -52,8 +33,8 @@ public class Transaction {
 		return outputs;
 	}
 
-	public PublicKey getReciepient() {
-		return reciepient;
+	public PublicKey getRecipient() {
+		return recipient;
 	}
 
 	public PublicKey getSender() {
@@ -72,12 +53,23 @@ public class Transaction {
 		return value;
 	}
 
-	public byte[] getSignature() {
-		return signature;
+	private String calculateHash() {
+		sequence++;
+		return StringUtils.applySHA256(
+			StringUtils.getStringFromKey(sender) +
+			StringUtils.getStringFromKey(recipient) +
+			value + sequence
+		);
+	}
+
+	public void generateSignature(PrivateKey privateKey) {
+		String data = StringUtils.getStringFromKey(sender) + StringUtils.getStringFromKey(recipient)
+					  + value;
+		signature = StringUtils.applyECDSASig(privateKey, data);
 	}
 
 	public boolean verifySignature() {
-		String data = StringUtils.getStringFromKey(sender) + StringUtils.getStringFromKey(reciepient)
+		String data = StringUtils.getStringFromKey(sender) + StringUtils.getStringFromKey(recipient)
 					  + value;
 		return StringUtils.verifyECDSASig(sender, data, signature);
 	}
@@ -100,15 +92,14 @@ public class Transaction {
 		var leftOver = getInputsValue() - value;
 		id = calculateHash();
 		// send value to recipient
-		outputs.add(new TransactionOutput(this.reciepient, value, id));
+		outputs.add(new TransactionOutput(this.recipient, value, id));
 		// send the left over 'change' back to sender
 		outputs.add(new TransactionOutput(this.sender, leftOver, id));
 
 		// add outputs to unspent list
-		for (TransactionOutput output : outputs)
-			Transactions.getUTXOs().put(output.getId(), output);
+		outputs.forEach(output -> Transactions.getUTXOs().put(output.getId(), output));
 
-		for (TransactionInput input : inputs)
+		for (var input : inputs)
 			if (input.getUTXO() != null)
 				Transactions.getUTXOs().remove(input.getUTXO().getId());
 

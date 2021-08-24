@@ -6,16 +6,14 @@ import java.security.PublicKey;
 
 public class TransactionOutput {
 
-	private String id;
-	private PublicKey reciepient;
-	private Double value;
-	private String parentTransactionId;
+	private final String id;
+	private final PublicKey recipient;
+	private final Double value;
 
-	public TransactionOutput(PublicKey reciepient, Double value, String parentTransactionId) {
-		this.reciepient = reciepient;
+	public TransactionOutput(PublicKey recipient, Double value, String parentTransactionId) {
+		this.recipient = recipient;
 		this.value = value;
-		this.parentTransactionId = parentTransactionId;
-		this.id = StringUtils.applySHA256(StringUtils.getStringFromKey(reciepient)
+		this.id = StringUtils.applySHA256(StringUtils.getStringFromKey(recipient)
 										  + value + parentTransactionId);
 	}
 
@@ -23,19 +21,15 @@ public class TransactionOutput {
 		return id;
 	}
 
-	public PublicKey getReciepient() {
-		return reciepient;
+	public PublicKey getRecipient() {
+		return recipient;
 	}
 
 	public Double getValue() {
 		return value;
 	}
 
-	public String getParentTransactionId() {
-		return parentTransactionId;
-	}
-
 	public boolean isMine(PublicKey publicKey) {
-		return (publicKey == reciepient);
+		return (publicKey == recipient);
 	}
 }

@@ -4,6 +4,7 @@ import java.security.*;
 import java.security.spec.ECGenParameterSpec;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Wallet {
@@ -48,11 +49,11 @@ public class Wallet {
 	}
 
 	public Transaction sendFunds(PublicKey recipient, Double value) {
-		if (getBalance() < value) { //gather balance and check funds.
-			System.out.println("#Not Enough funds to send transaction. Transaction Discarded.");
+		// gather balance and check funds
+		if (getBalance() < value) {
 			return null;
 		}
-		ArrayList<TransactionInput> inputs = new ArrayList<TransactionInput>();
+		List<TransactionInput> inputs = new ArrayList<>();
 		float total = 0;
 		for (var item : UTXOs.entrySet()) {
 			var utxo = item.getValue();
